@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>社会OS分析フレームワーク - Unified Model</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+        
+        :root {
+            --bg-dark: #020617;
+            --accent-blue: #38bdf8;
+            --accent-emerald: #10b981;
+            --layer-bg: rgba(30, 41, 59, 0.7);
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: var(--bg-dark);
+            color: #f1f5f9;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .canvas-area {
+            background: radial-gradient(circle at top right, #1e293b 0%, #020617 100%);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+            max-width: 900px;
+            width: 100%;
+            padding: 3rem;
+            position: relative;
+        }
+
+        .code-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .layer-item {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+            border-left: 6px solid #475569;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .layer-item:hover {
+            border-left-color: var(--accent-blue);
+            background: rgba(30, 41, 59, 0.8);
+            transform: translateX(8px);
+        }
+
+        .active-blue { border-left-color: var(--accent-blue); }
+        .active-emerald { border-left-color: var(--accent-emerald); }
+
+        .connector-line {
+            width: 2px;
+            height: 24px;
+            background: linear-gradient(to bottom, #334155, transparent);
+            margin-left: 3rem;
+        }
+
+        .tag-label {
+            font-size: 0.7rem;
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            padding: 2px 8px;
+            border-radius: 2px;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* 背景のグリッド模様 */
+        .bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(56, 189, 248, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .os-badge {
+            background: linear-gradient(90deg, #0ea5e9 0%, #2563eb 100%);
+            box-shadow: 0 0 15px rgba(14, 165, 233, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="canvas-area relative z-10">
+        <div class="bg-grid"></div>
+
+        <!-- Header Section -->
+        <header class="relative z-20 mb-12 flex justify-between items-start border-b border-slate-800 pb-8">
+            <div>
+                <h1 class="text-4xl font-black tracking-tight text-white mb-2">
+                    社会OS分析<span class="text-blue-400">フレームワーク</span>
+                </h1>
+                <p class="text-slate-400 text-lg font-bold">Unified Model v1.0 ― 「構造」で動く社会の解読</p>
+            </div>
+            <div class="text-right flex flex-col items-end">
+                <span class="code-font text-xs text-blue-500 font-bold mb-1">ANALYSIS SYSTEM</span>
+                <span class="text-[10px] text-slate-500 font-bold">BY NORIYUKI SHOTO</span>
+            </div>
+        </header>
+
+        <div class="space-y-0 relative z-20">
+            
+            <!-- Layer 0 -->
+            <div class="layer-item p-5 active-emerald bg-emerald-950/10">
+                <span class="tag-label bg-emerald-500 text-white">Layer 0：環境条件</span>
+                <div class="flex justify-between items-center mb-3">
+                    <h2 class="text-xl font-black text-emerald-400">OSが変わる理由</h2>
+                    <span class="text-xs text-emerald-600 font-bold">OSは進化ではなく「環境適応」</span>
+                </div>
+                <div class="grid grid-cols-4 gap-4">
+                    <div class="bg-slate-900/50 p-2 rounded text-center">
+                        <span class="block text-[10px] text-slate-500 font-bold mb-1 uppercase">Media</span>
+                        <span class="text-xs font-bold">TV → SNS → AI</span>
+                    </div>
+                    <div class="bg-slate-900/50 p-2 rounded text-center">
+                        <span class="block text-[10px] text-slate-500 font-bold mb-1 uppercase">Economy</span>
+                        <span class="text-xs font-bold">成長 → 不安</span>
+                    </div>
+                    <div class="bg-slate-900/50 p-2 rounded text-center">
+                        <span class="block text-[10px] text-slate-500 font-bold mb-1 uppercase">Psychology</span>
+                        <span class="text-xs font-bold">希望 → 疲労</span>
+                    </div>
+                    <div class="bg-slate-900/50 p-2 rounded text-center">
+                        <span class="block text-[10px] text-slate-500 font-bold mb-1 uppercase">Speed</span>
+                        <span class="text-xs font-bold">週 → 秒</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="connector-line"></div>
+
+            <!-- Layer 1 & 2 combined logic -->
+            <div class="grid grid-cols-2 gap-4">
+                <div class="layer-item p-4">
+                    <span class="tag-label bg-slate-700 text-slate-300">Layer 1：入力</span>
+                    <h3 class="font-bold text-white mb-2">生の感情・主張</h3>
+                    <div class="flex flex-wrap gap-1">
+                        <span class="text-[10px] border border-red-500/30 text-red-400 px-2 rounded">怒り</span>
+                        <span class="text-[10px] border border-blue-500/30 text-blue-400 px-2 rounded">不安</span>
+                        <span class="text-[10px] border border-yellow-500/30 text-yellow-400 px-2 rounded">正義</span>
+                    </div>
+                    <p class="text-[9px] text-slate-500 mt-2">※まだ構造ではない、ただのエネルギー</p>
+                </div>
+                <div class="layer-item p-4">
+                    <span class="tag-label bg-slate-700 text-slate-300">Layer 2：翻訳</span>
+                    <h3 class="font-bold text-white mb-2">ナラティブ圧縮</h3>
+                    <div class="text-[10px] space-y-1 text-slate-300 font-bold">
+                        <div>● 善 vs 悪</div>
+                        <div>● 被害者 vs 加害者</div>
+                        <div>● 私たち vs 彼ら</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="connector-line"></div>
+
+            <!-- Layer 3: Main OS -->
+            <div class="layer-item p-6 active-blue bg-blue-900/10 relative overflow-hidden">
+                <div class="absolute -right-4 -top-4 opacity-10">
+                    <svg width="150" height="150" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="text-blue-400"><circle cx="12" cy="12" r="10"></circle><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg>
+                </div>
+                <span class="tag-label os-badge text-white">Layer 3：動員OS</span>
+                <h2 class="text-2xl font-black mb-4 tracking-tighter">Mobilization OS</h2>
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center bg-slate-900/80 p-2 border border-slate-700">
+                        <span class="text-xs font-bold w-20">理念OS</span>
+                        <span class="text-[10px] text-slate-400">思想・理想による長期運動型</span>
+                        <span class="text-[10px] font-mono text-blue-400">~80s</span>
+                    </div>
+                    <div class="flex justify-between items-center bg-slate-900/80 p-2 border border-slate-700">
+                        <span class="text-xs font-bold w-20">共感OS</span>
+                        <span class="text-[10px] text-slate-400">象徴・ストーリーによる熱狂型</span>
+                        <span class="text-[10px] font-mono text-blue-400">90s~</span>
+                    </div>
+                    <div class="flex justify-between items-center bg-blue-500/20 p-2 border border-blue-500/50">
+                        <span class="text-xs font-black w-20 text-blue-400">敵味方OS</span>
+                        <span class="text-[10px] text-blue-200">対立・アイデンティティによる分断型</span>
+                        <span class="text-[10px] font-mono text-blue-400">2010s</span>
+                    </div>
+                    <div class="flex justify-between items-center bg-emerald-500/20 p-2 border border-emerald-500/50">
+                        <span class="text-xs font-black w-20 text-emerald-400">生活機能OS</span>
+                        <span class="text-[10px] text-emerald-200 font-bold">実利・体感安全・インフラによる安定型</span>
+                        <span class="text-[10px] font-mono text-emerald-400">2020s~</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="connector-line"></div>
+
+            <!-- Layer 4 & 5 -->
+            <div class="grid grid-cols-2 gap-4">
+                <div class="layer-item p-4 border-l-red-500 bg-red-950/10">
+                    <span class="tag-label bg-red-500 text-white">Layer 4：歪み</span>
+                    <h3 class="font-bold text-white mb-2">制度フィルター</h3>
+                    <p class="text-[10px] text-red-200 leading-relaxed font-bold">
+                        資金・メディア・支持層の制約により、理念は生存インセンティブに従って変形する。
+                    </p>
+                </div>
+                <div class="layer-item p-4">
+                    <span class="tag-label bg-slate-700 text-slate-300">Layer 5：均衡</span>
+                    <h3 class="font-bold text-white mb-2">誰も動けない理由</h3>
+                    <ul class="text-[9px] text-slate-400 space-y-1 font-bold">
+                        <li>● 炎上回避・支持者離脱の恐怖</li>
+                        <li>● 囚人のジレンマ・ナッシュ均衡</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="connector-line"></div>
+
+            <!-- Layer 6 -->
+            <div class="layer-item p-5 border-dashed border-2 border-slate-700 bg-black/40 text-center">
+                <span class="tag-label bg-slate-400 text-slate-900">Layer 6：可視化された現実</span>
+                <div class="flex justify-center gap-8 mt-2">
+                    <div class="flex flex-col items-center">
+                        <span class="text-xs font-black text-white">炎上・分断</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <span class="text-xs font-black text-white">NGOの沈黙</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <span class="text-xs font-black text-white">政治ショー</span>
+                    </div>
+                </div>
+                <p class="text-[10px] text-slate-500 mt-4 tracking-widest font-bold">
+                    RESULT IS NOT THE CAUSE ― これらは原因ではなく「処理結果」である
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Branding Footer -->
+        <footer class="mt-12 flex justify-between items-end">
+            <div class="text-[10px] text-slate-600 font-bold">
+                SOCIAL OPERATING SYSTEM ANALYSIS FRAMEWORK<br>
+                UNIFIED MODEL V1.0 / COGNITIVE STRUCTURE
+            </div>
+            <div class="text-right border-r-4 border-blue-500 pr-4">
+                <p class="text-sm font-black text-white tracking-widest">社会OS分析</p>
+                <p class="text-[10px] text-blue-500 font-bold">松濤 紀之</p>
+            </div>
+        </footer>
+    </div>
+
+</body>
+</html>
