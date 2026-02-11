@@ -47,7 +47,7 @@ https://bravepika953.github.io/social-os-frameworks-v1.0/
 ---
 
 ## 📘 ライセンス
-Free
+CC BY-NC-SA 4.0
 
 ---
 
